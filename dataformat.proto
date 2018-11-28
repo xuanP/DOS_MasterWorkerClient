@@ -1,0 +1,10 @@
+syntax = "proto2";
+package msg;
+message Request_all{
+	required string myname=1;
+	required string srcip=2;
+	required string srcport=3;
+
+	required int32 operationtype=4;
+	required int32 token=5;
+}
