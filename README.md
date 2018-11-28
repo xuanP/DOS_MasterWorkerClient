@@ -1,30 +1,21 @@
 # DOS_MasterWorkerClient
-目前用到的一个message的样式【后续根据需求可以更改】
-syntax = "proto2";
-package msg;
-message Request_all{
-	required string myname=1;
-	required string srcip=2;
-	required string srcport=3;
-	required int32 operationtype=4;
-	required int32 token=5;
-}
+目前用到的一个message的样式在dataformat.proto里【后续根据需求可以更改】。
 
 myname：独一无二，相当于id，使client和worker都便于被master记录
 
 srcip/srcport并不真正指发送和接收的端口，而是发送请求者想让接收请求者知道的ip和port。
 
-operationtype：请求的类型
-operationtype=0:请求注册
-operationtype=1:master请求worker回复balance
-operationtype=3:client请求master分配一个worker
+operationtype：请求的类型；
+operationtype=0:请求注册；
+operationtype=1:master请求worker回复balance；
+operationtype=3:client请求master分配一个worker；
 .etc
 
 token：对方的token，相当于一把钥匙，有钥匙的人才能使用对应接收者的某些服务。默认master的token为0;
 
 example：注册请求(operationtype=0)
-worker把自己绑定好的用于监听client请求的ip/port放在srcip/srcport，附上自己的myname="xxxxx"，master的token=0，以及operationtype=0里发给master.
-Master收到后首先判断对方有没有权限（token对不对）使用自己的服务，如果没有，则丢弃这个包不管。
+worker把自己绑定好的用于监听client请求的ip/port放在srcip/srcport，附上自己的myname="xxxxx"，master的token=0，以及operationtype=0里发给master；
+Master收到后首先判断对方有没有权限（token对不对）使用自己的服务，如果没有，则丢弃这个包不管；
 如果这是一个合法的请求，则检查请求的类型是否是注册请求，如果是，则把相关信息放进master维护的一个map里。
 
 Tips:
@@ -36,10 +27,12 @@ Tips:
 4. 记得关socket和context
 
 #任务分配：
-一共有4对socket
-master-worker（2对,socket1,socket3）
-master-client(1对，socket2)
-worker-client(1对，socket4)
+一共有4对socket：
+master-worker（2对,socket1,socket3）；
+
+master-client(1对，socket2)；
+
+worker-client(1对，socket4)；
 
 PX：[socket1:registerworker() register()] [socket3:master与worker长期通讯的一对。SendInstruction() ReceiveInstruction()]
 
