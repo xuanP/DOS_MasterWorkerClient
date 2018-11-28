@@ -42,7 +42,9 @@ master-client(1对，socket2)
 worker-client(1对，socket4)
 
 PX：[socket1:registerworker() register()] [socket3:master与worker长期通讯的一对。SendInstruction() ReceiveInstruction()]
+
 LYT:[socket2:client向master发送“我想要计算，请给我分配”。master通过socket3查看负载均衡后把worker信息（ip,port,token等）回复给client,client接收这信息并放进一个数据结构中存储]
+
 QYT:[socket4:client把待计算数据发给worker，worker接收并计算。得出一个计算结果返回给client]
 
 
